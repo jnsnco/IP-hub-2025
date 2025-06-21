@@ -103,7 +103,7 @@ def main():
             ],
             llm=llm,
             verbose=True,
-            max_turns=10,
+            max_iterations=50,
         )
         response = agent.chat(
             """Return your FINAL answer in markdown format. Include an overall summary and a list of relevant
@@ -113,10 +113,11 @@ def main():
     This can include aspects of the previous conversation history.
 
     If there are interesting relevant details found in the patents you discover,
-    investigate further by asking more questions to tools in order to find more relevant patents.
+    investigate them further by asking more questions to tools in order to find more relevant patents.
+    Use key words and technologies from the returned patents and repeat until you have found all related
+    patents.
 
     Example:
-    ```
     # Summary
     This is where the summary should go. Include details on the related patent landscape
     and make recommendations for which patents the user might want to look at first.
@@ -127,7 +128,9 @@ def main():
 
     ## US643216 - THIS IS THE SECOND PATENT TITLE
     This is the second patent's summary.
-    ```"""
+
+
+    """
             + json["query"]
         )
         return make_response({"response": str(response)}, 200)
